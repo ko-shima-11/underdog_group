@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>施設申請モック</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header>
+      <div>
+        <h1>施設利用申請モック</h1>
+        <p>ロールごとに初期画面を出し分け。スワイプや簡易カレンダーで動きを確認できます。</p>
+      </div>
+      <div class="role-toggle" aria-label="ロール切り替え">
+        <button class="active" data-role="applicant">申請者</button>
+        <button data-role="approver">承認者</button>
+        <button data-role="manager">施設管理者</button>
+      </div>
+    </header>
+    <main>
+      <section class="panel active" id="applicant">
+        <div class="grid two">
+          <div class="card">
+            <h3>申請画面</h3>
+            <small>申請者が最初に開く画面。入力と同時に右側プレビューへ反映。</small>
+            <div class="form-row">
+              <div>
+                <label>利用施設</label>
+                <select id="facility">
+                  <option>会議室 NORTH</option>
+                  <option>多目的ホール</option>
+                  <option>実験室 A</option>
+                  <option>交流ラボ</option>
+                </select>
+              </div>
+              <div>
+                <label>利用日</label>
+                <input id="date" type="date">
+              </div>
+            </div>
+            <div class="form-row">
+              <div>
+                <label>開始</label>
+                <input id="start" type="time" value="10:00">
+              </div>
+              <div>
+                <label>終了</label>
+                <input id="end" type="time" value="12:00">
+              </div>
+              <div>
+                <label>人数</label>
+                <input id="people" type="number" min="1" value="6">
+              </div>
+            </div>
+            <label>用途</label>
+            <input id="purpose" type="text" placeholder="例: チーム勉強会 / 実験レビュー">
+            <label style="margin-top:10px;">連絡事項</label>
+            <textarea id="memo" placeholder="希望備品や当日の流れなど"></textarea>
+            <div style="margin-top: 12px; display: flex; gap: 10px; align-items: center;">
+              <button class="primary" id="submit-request" type="button">申請を送信</button>
+              <button class="muted-btn" type="button" id="quick-fill">サンプル入力</button>
+            </div>
+          </div>
+          <div class="card">
+            <h3>入力内容のプレビュー</h3>
+            <div class="preview-box" id="preview">
+              <span class="chip accent">施設: 会議室 NORTH</span>
+              <span class="chip warn">日付: -</span>
+              <span class="chip">時間: 10:00 - 12:00</span>
+              <span class="chip">人数: 6 名</span>
+              <p id="preview-purpose">用途: -</p>
+              <p id="preview-memo">連絡事項: -</p>
+            </div>
+            <div class="card-grid" style="margin-top: 14px;">
+              <div class="metric">
+                <span class="label">処理ステータス</span>
+                <span class="value">下書き</span>
+              </div>
+              <div class="metric">
+                <span class="label">承認経路</span>
+                <span class="value">主管 → 管理者</span>
+              </div>
+              <div class="metric">
+                <span class="label">通知先</span>
+                <span class="value">Slack #facility</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel" id="approver">
+        <div class="grid two">
+          <div class="card">
+            <div class="swipe-hint">
+              <span>左: 拒否</span>
+              <div class="bar"></div>
+              <span>右: 承認</span>
+            </div>
+            <div class="deck" id="deck"></div>
+            <div class="deck-empty" id="deck-empty" style="display:none;">新規の申請はありません</div>
+            <div class="deck-actions">
+              <button class="danger-btn" id="reject-btn">左にスワイプ</button>
+              <button class="approve-btn" id="approve-btn">右にスワイプ</button>
+            </div>
+          </div>
+          <div class="card">
+            <h3>最近の判定</h3>
+            <small>アクションはここに積み上がります</small>
+            <ul class="decision-log" id="decision-log"></ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel" id="manager">
+        <div class="grid two">
+          <div class="card">
+            <h3>通知リスト</h3>
+            <small>施設管理者が最初に開く画面。申請を選ぶと右側のカレンダーへ。</small>
+            <ul class="notification-list" id="notification-list"></ul>
+          </div>
+          <div class="card">
+            <h3 id="schedule-title">カレンダー</h3>
+            <small id="schedule-sub">通知を選択してください</small>
+            <div class="legend">
+              <span><span class="dot" style="background:#ff6b6b;"></span>埋まり</span>
+              <span><span class="dot" style="background:#ffd166;"></span>空き</span>
+            </div>
+            <div class="calendar" id="calendar"></div>
+            <div class="schedule-actions">
+              <button class="muted-btn" id="manager-reject">拒否</button>
+              <button class="primary" id="manager-approve">承認</button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+    <div class="toast" id="toast">申請を送信しました</div>
+  </div>
+
+  <script type="module" src="main.js"></script>
+</body>
+</html>
