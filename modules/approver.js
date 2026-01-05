@@ -21,6 +21,7 @@ export function initApprover(showToast) {
     if (!currentQueue.length) {
       deck.style.display = "none";
       deckEmpty.style.display = "grid";
+      deckEmpty.innerHTML = '<div style="text-align:center;"><div>新規の申請はありません</div><div style="margin-top:8px;color:var(--muted);font-size:13px;">すべて処理済みです</div></div>';
       return;
     }
     deck.style.display = "block";
@@ -30,16 +31,22 @@ export function initApprover(showToast) {
       const isTop = idx === stack.length - 1;
       const card = document.createElement("div");
       card.className = "swipe-card";
-      card.dataset.hint = "スワイプ可";
+      // card.dataset.hint = "スワイプ可";
       card.style.zIndex = 10 + idx;
       card.style.transform = `translateY(${idx * 6}px) scale(${1 - idx * 0.02})`;
       card.style.pointerEvents = isTop ? "auto" : "none";
       card.innerHTML = `
-        <h4>${item.facility}</h4>
-        <p><strong>申請者:</strong> ${item.applicant}</p>
-        <p><strong>日付:</strong> ${item.date} / <strong>時間:</strong> ${item.time}</p>
-        <p><strong>用途:</strong> ${item.purpose}</p>
-        <p><strong>備品:</strong> ${item.equipment}</p>
+        <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:10px;">
+          <h4 style="margin:0;">${item.facility}</h4>
+          <span class="chip accent" style="font-size:11px;">残り${currentQueue.length}件</span>
+        </div>
+        <p style="margin:4px 0;"><strong>申請者:</strong> ${item.applicant}</p>
+        <p style="margin:4px 0;"><strong>日時:</strong> ${item.date} / ${item.time}</p>
+        <p style="margin:4px 0;"><strong>用途:</strong> ${item.purpose}</p>
+        <p style="margin:4px 0;"><strong>備品:</strong> ${item.equipment}</p>
+        <div style="margin-top:14px;padding-top:10px;border-top:1px dashed rgba(255,255,255,0.1);color:var(--muted);font-size:12px;text-align:center;">
+          ← 左にスワイプで拒否 / 右にスワイプで承認 →
+        </div>
       `;
       if (isTop) attachSwipe(card, item);
       deck.appendChild(card);
@@ -89,13 +96,13 @@ export function initApprover(showToast) {
   const finalizeDecision = (type, data) => {
     currentQueue = currentQueue.filter((item) => item.id !== data.id);
     const li = document.createElement("li");
-    li.innerHTML = `<div><strong>${data.facility}</strong> / ${data.date} ${data.time}<br><small>${data.applicant}・${data.purpose}</small></div>`;
+    li.innerHTML = `<div><strong>${data.facility}</strong> / ${data.date} ${data.time}<br><small>${data.applicant} ・ ${data.purpose}</small></div>`;
     const status = document.createElement("span");
     status.className = `chip ${type === "approve" ? "accent" : "danger"}`;
     status.textContent = type === "approve" ? "承認" : "拒否";
     li.appendChild(status);
     decisionLog.prepend(li);
-    showToast(type === "approve" ? "承認しました" : "拒否しました", 1500);
+    showToast(type === "approve" ? "申請を承認しました" : "申請を拒否しました", 1800);
     renderDeck();
   };
 

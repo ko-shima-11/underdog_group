@@ -8,6 +8,10 @@ export function initApplicant(showToast) {
     purpose: document.getElementById("purpose"),
     memo: document.getElementById("memo"),
   };
+  
+  // 今日の日付をデフォルトに設定
+  const today = new Date().toISOString().slice(0, 10);
+  preview.date.value = today;
   const previewChip = {
     facility: document.querySelector("#preview .chip.accent"),
     date: document.querySelector("#preview .chip.warn"),
@@ -19,6 +23,7 @@ export function initApplicant(showToast) {
 
   const quickFill = document.getElementById("quick-fill");
   const submitRequest = document.getElementById("submit-request");
+  const clearForm = document.getElementById("clear-form");
 
   const formatDateInput = (value) => {
     if (!value) return "-";
@@ -49,7 +54,24 @@ export function initApplicant(showToast) {
   });
 
   submitRequest.addEventListener("click", () => {
-    showToast("申請を送信しました");
+    // 簡単なバリデーション
+    if (!preview.date.value || !preview.purpose.value) {
+      showToast("必須項目を入力してください", 2000);
+      return;
+    }
+    showToast("申請を送信しました！", 2000);
+  });
+
+  clearForm.addEventListener("click", () => {
+    preview.facility.selectedIndex = 0;
+    preview.date.value = today;
+    preview.start.value = "10:00";
+    preview.end.value = "12:00";
+    preview.people.value = 6;
+    preview.purpose.value = "";
+    preview.memo.value = "";
+    refreshPreview();
+    showToast("フォームをクリアしました", 1500);
   });
 
   refreshPreview();
