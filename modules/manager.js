@@ -2,7 +2,7 @@ export function initManager(showToast) {
   const notifications = [
     {
       id: "n-1",
-      facility: "創造スタジオ",
+      facility: "第一体育館",
       applicant: "佐藤 花",
       date: "8/22",
       time: "14:00-16:00",
@@ -16,7 +16,7 @@ export function initManager(showToast) {
     },
     {
       id: "n-2",
-      facility: "会議室 NORTH",
+      facility: "大講義室",
       applicant: "李 龍",
       date: "8/23",
       time: "09:00-11:00",
@@ -30,15 +30,15 @@ export function initManager(showToast) {
     },
     {
       id: "n-3",
-      facility: "実験室 A",
+      facility: "ワーキングコモンズ",
       applicant: "アンナ",
       date: "8/24",
       time: "10:00-13:00",
       note: "プロト洗浄",
       slots: [
-        { label: "10:00 - 11:00", free: false },
-        { label: "11:00 - 12:00", free: false },
-        { label: "12:00 - 13:00", free: false },
+        { label: "10:00 - 11:00", free: true },
+        { label: "11:00 - 12:00", free: true },
+        { label: "12:00 - 13:00", free: true },
         { label: "13:00 - 14:00", free: true },
       ],
     },
@@ -46,42 +46,42 @@ export function initManager(showToast) {
 
   // 週間カレンダー用のダミーデータ
   const weeklyData = {
-    "会議室 NORTH": [
+    "大講義室": [
       ["available", "busy", "available", "busy", "available", "available", "busy"],
       ["busy", "busy", "available", "available", "available", "busy", "available"],
       ["available", "available", "busy", "available", "busy", "available", "available"],
       ["available", "available", "busy", "busy", "available", "busy", "busy"],
       ["busy", "available", "available", "available", "busy", "available", "busy"],
     ],
-    "多目的ホール": [
+    "ICTホール": [
       ["busy", "available", "busy", "busy", "available", "available", "busy"],
       ["available", "busy", "available", "available", "busy", "available", "busy"],
       ["available", "busy", "busy", "available", "available", "busy", "busy"],
       ["busy", "available", "available", "busy", "busy", "available", "available"],
       ["busy", "available", "busy", "available", "busy", "available", "available"],
     ],
-    "実験室 A": [
-      ["available", "busy", "available", "available", "busy", "available", "busy"],
-      ["busy", "available", "busy", "available", "available", "busy", "available"],
-      ["available", "busy", "available", "busy", "busy", "available", "busy"],
-      ["available", "available", "busy", "available", "busy", "busy", "available"],
-      ["busy", "available", "busy", "busy", "available", "busy", "available"],
+    "ワーキングコモンズ": [
+      ["available", "available", "available", "available", "available", "available", "available"],
+      ["available", "available", "available", "available", "available", "available", "available"],
+      ["available", "available", "available", "available", "available", "available", "available"],
+      ["available", "available", "available", "available", "available", "available", "available"],
+      ["available", "available", "available", "available", "available", "available", "available"],
     ],
-    "実験室 B": [
+    "PBL演習室": [
       ["busy", "available", "available", "busy", "available", "busy", "busy"],
       ["available", "busy", "available", "available", "busy", "available", "busy"],
       ["busy", "available", "busy", "busy", "available", "busy", "available"],
       ["available", "busy", "available", "busy", "available", "available", "busy"],
       ["available", "busy", "busy", "available", "busy", "available", "available"],
     ],
-    "交流ラボ": [
+    "カンファレンスルーム": [
       ["busy", "available", "busy", "available", "available", "busy", "busy"],
       ["available", "busy", "available", "busy", "busy", "available", "busy"],
       ["available", "available", "busy", "available", "busy", "available", "available"],
       ["busy", "available", "busy", "busy", "available", "busy", "available"],
       ["available", "busy", "available", "busy", "busy", "available", "busy"],
     ],
-    "創造スタジオ": [
+    "第一体育館": [
       ["available", "busy", "available", "available", "busy", "available", "busy"],
       ["busy", "busy", "available", "busy", "available", "available", "available"],
       ["available", "available", "busy", "busy", "busy", "available", "available"],

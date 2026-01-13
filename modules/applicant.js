@@ -1,49 +1,49 @@
 export function initApplicant(showToast) {
   // サンプル予約データ
   const reservations = [
-    { id: 1, facility: "会議室 NORTH", date: "2026-01-20", time: "10:00-12:00", purpose: "チーム勉強会", status: "approved" },
-    { id: 2, facility: "多目的ホール", date: "2026-01-25", time: "14:00-16:00", purpose: "製品セミナー", status: "pending" },
-    { id: 3, facility: "実験室 A", date: "2026-02-05", time: "09:00-11:00", purpose: "実験レビュー", status: "approved" },
+    { id: 1, facility: "大講義室", date: "2026-01-20", time: "10:00-12:00", purpose: "チーム勉強会", status: "approved" },
+    { id: 2, facility: "ICTホール", date: "2026-01-25", time: "14:00-16:00", purpose: "製品セミナー", status: "pending" },
+    { id: 3, facility: "ワーキングコモンズ", date: "2026-02-05", time: "09:00-11:00", purpose: "実験レビュー", status: "approved" },
   ];
 
   // 週間カレンダー用のダミーデータ
   const weeklyData = {
-    "会議室 NORTH": [
+    "大講義室": [
       ["available", "busy", "available", "busy", "available", "available", "busy"],
       ["busy", "busy", "available", "available", "available", "busy", "available"],
       ["available", "available", "busy", "available", "busy", "available", "available"],
       ["available", "available", "busy", "busy", "available", "busy", "busy"],
       ["busy", "available", "available", "available", "busy", "available", "busy"],
     ],
-    "多目的ホール": [
+    "ICTホール": [
       ["busy", "available", "busy", "busy", "available", "available", "busy"],
       ["available", "busy", "available", "available", "busy", "available", "busy"],
       ["available", "busy", "busy", "available", "available", "busy", "busy"],
       ["busy", "available", "available", "busy", "busy", "available", "available"],
       ["busy", "available", "busy", "available", "busy", "available", "available"],
     ],
-    "実験室 A": [
+    "ワーキングコモンズ": [
       ["available", "busy", "available", "available", "busy", "available", "busy"],
       ["busy", "available", "busy", "available", "available", "busy", "available"],
       ["available", "busy", "available", "busy", "busy", "available", "busy"],
       ["available", "available", "busy", "available", "busy", "busy", "available"],
       ["busy", "available", "busy", "busy", "available", "busy", "available"],
     ],
-    "実験室 B": [
+    "PBL演習室": [
       ["busy", "available", "available", "busy", "available", "busy", "busy"],
       ["available", "busy", "available", "available", "busy", "available", "busy"],
       ["busy", "available", "busy", "busy", "available", "busy", "available"],
       ["available", "busy", "available", "busy", "available", "available", "busy"],
       ["available", "busy", "busy", "available", "busy", "available", "available"],
     ],
-    "交流ラボ": [
+    "カンファレンスルーム": [
       ["busy", "available", "busy", "available", "available", "busy", "busy"],
       ["available", "busy", "available", "busy", "busy", "available", "busy"],
       ["available", "available", "busy", "available", "busy", "available", "available"],
       ["busy", "available", "busy", "busy", "available", "busy", "available"],
       ["available", "busy", "available", "busy", "busy", "available", "busy"],
     ],
-    "創造スタジオ": [
+    "第一体育館": [
       ["available", "busy", "available", "available", "busy", "available", "busy"],
       ["busy", "busy", "available", "busy", "available", "available", "available"],
       ["available", "available", "busy", "busy", "busy", "available", "available"],
@@ -196,7 +196,7 @@ export function initApplicant(showToast) {
   Object.values(preview).forEach((el) => el.addEventListener("input", refreshPreview));
 
   quickFill.addEventListener("click", () => {
-    preview.facility.value = "多目的ホール";
+    preview.facility.value = "ICTホール";
     preview.date.value = new Date().toISOString().slice(0, 10);
     preview.start.value = "14:00";
     preview.end.value = "16:00";

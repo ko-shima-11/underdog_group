@@ -9,12 +9,12 @@ export function initApprover(showToast) {
   console.log("Elements:", { deck, deckEmpty, decisionLog, approveBtn, rejectBtn });
 
   const pendingCards = [
-    { id: 1, applicant: "佐藤 花", facility: "会議室 NORTH", date: "1/20 (月)", time: "10:00-12:00", purpose: "部署横断MTG", equipment: "モニター, ホワイトボード" },
-    { id: 2, applicant: "李 龍", facility: "多目的ホール", date: "1/22 (水)", time: "13:00-15:00", purpose: "社外セミナー", equipment: "PAセット, 配信" },
-    { id: 3, applicant: "アンナ", facility: "実験室 B", date: "1/24 (金)", time: "09:00-10:30", purpose: "デモ準備", equipment: "3Dプリンタ, 工具" },
-    { id: 4, applicant: "高橋 光", facility: "交流ラボ", date: "1/25 (土)", time: "16:00-18:00", purpose: "採用向け会社説明", equipment: "スクリーン" },
-    { id: 5, applicant: "田中 健", facility: "実験室 A", date: "1/27 (月)", time: "14:00-17:00", purpose: "新製品テスト", equipment: "測定器, PC" },
-    { id: 6, applicant: "鈴木 美咲", facility: "創造スタジオ", date: "1/28 (火)", time: "10:00-12:00", purpose: "ワークショップ", equipment: "プロジェクター" },
+    { id: 1, applicant: "佐藤 花", facility: "大講義室", date: "1/20 (月)", time: "10:00-12:00", purpose: "部署横断MTG", equipment: "モニター, ホワイトボード" },
+    { id: 2, applicant: "李 龍", facility: "ICTホール", date: "1/22 (水)", time: "13:00-15:00", purpose: "社外セミナー", equipment: "PAセット, 配信" },
+    { id: 3, applicant: "アンナ", facility: "PBL演習室", date: "1/24 (金)", time: "09:00-10:30", purpose: "デモ準備", equipment: "3Dプリンタ, 工具" },
+    { id: 4, applicant: "高橋 光", facility: "カンファレンスルーム", date: "1/25 (土)", time: "16:00-18:00", purpose: "採用向け会社説明", equipment: "スクリーン" },
+    { id: 5, applicant: "田中 健", facility: "ワーキングコモンズ", date: "1/27 (月)", time: "14:00-17:00", purpose: "新製品テスト", equipment: "測定器, PC" },
+    { id: 6, applicant: "鈴木 美咲", facility: "第一体育館", date: "1/28 (火)", time: "10:00-12:00", purpose: "ワークショップ", equipment: "プロジェクター" },
   ];
   console.log("pendingCards:", pendingCards);
   let currentQueue = [...pendingCards];
