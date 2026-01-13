@@ -21,6 +21,30 @@
     </header>
     <main>
       <section class="panel active" id="applicant">
+        <div class="card" style="margin-bottom: 16px;">
+          <h3>週間カレンダー</h3>
+          <small>各施設の1週間の使用状況を確認できます。</small>
+          <div class="facility-selector">
+            <label for="applicant-facility-select">施設を選択:</label>
+            <select id="applicant-facility-select">
+              <option value="会議室 NORTH">会議室 NORTH</option>
+              <option value="多目的ホール">多目的ホール</option>
+              <option value="実験室 A">実験室 A</option>
+              <option value="実験室 B">実験室 B</option>
+              <option value="交流ラボ">交流ラボ</option>
+              <option value="創造スタジオ">創造スタジオ</option>
+            </select>
+          </div>
+          <div class="date-selector" style="margin: 12px 0;">
+            <label for="applicant-week-start">表示開始日を選択:</label>
+            <input id="applicant-week-start" type="date" style="max-width: 200px;">
+          </div>
+          <div class="weekly-calendar" id="applicant-calendar"></div>
+          <div class="legend" style="margin-top: 12px;">
+            <span><span class="dot" style="background:#ff6b6b;"></span>予約済</span>
+            <span><span class="dot" style="background:#4fd1c5;"></span>空き</span>
+          </div>
+        </div>
         <div class="grid two">
           <div class="card">
             <h3>申請画面</h3>
@@ -59,13 +83,13 @@
             <label for="memo" style="margin-top:10px;">連絡事項・備品希望</label>
             <textarea id="memo" placeholder="希望備品や当日の流れなど"></textarea>
             <div style="margin-top: 12px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-              <button class="primary" id="submit-request" type="button">
-                申請を送信する
+              <button class="btn-submit" id="submit-request" type="button">
+                <span class="btn-icon">📝</span> 申請を送信する
               </button>
-              <button class="muted-btn" type="button" id="quick-fill">
+              <button class="btn-secondary" type="button" id="quick-fill">
                 サンプル自動入力
               </button>
-              <button class="muted-btn" type="button" id="clear-form">
+              <button class="btn-secondary" type="button" id="clear-form">
                 クリア
               </button>
             </div>
@@ -95,6 +119,11 @@
               </div>
             </div>
           </div>
+        </div>
+        <div class="card" style="margin-top: 16px;">
+          <h3>予約済み一覧</h3>
+          <small>あなたの予約を管理できます。</small>
+          <ul class="reservation-list" id="reservation-list"></ul>
         </div>
       </section>
 
@@ -140,11 +169,14 @@
               <option value="創造スタジオ">創造スタジオ</option>
             </select>
           </div>
+          <div class="date-selector" style="margin: 12px 0;">
+            <label for="manager-week-start">表示開始日を選択:</label>
+            <input id="manager-week-start" type="date" style="max-width: 200px;">
+          </div>
           <div class="weekly-calendar" id="weekly-calendar"></div>
           <div class="legend" style="margin-top: 12px;">
-            <span><span class="dot" style="background:#ff6b6b;"></span>埋まり</span>
+            <span><span class="dot" style="background:#ff6b6b;"></span>予約済</span>
             <span><span class="dot" style="background:#4fd1c5;"></span>空き</span>
-            <span><span class="dot" style="background:#e0e0e0;"></span>未使用</span>
           </div>
         </div>
         <div class="grid two">
@@ -157,12 +189,12 @@
             <h3 id="schedule-title">カレンダー</h3>
             <small id="schedule-sub">通知を選択してください</small>
             <div class="legend">
-              <span><span class="dot" style="background:#ff6b6b;"></span>埋まり</span>
+              <span><span class="dot" style="background:#ff6b6b;"></span>予約済</span>
               <span><span class="dot" style="background:#4fd1c5;"></span>空き</span>
             </div>
             <div class="calendar" id="calendar"></div>
             <div class="schedule-actions">
-              <button class="muted-btn danger-outline" id="manager-reject">
+              <button class="btn-reject-small" id="manager-reject">
                 拒否する
               </button>
               <button class="primary" id="manager-approve">

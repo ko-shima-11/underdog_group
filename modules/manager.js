@@ -47,46 +47,46 @@ export function initManager(showToast) {
   // 週間カレンダー用のダミーデータ
   const weeklyData = {
     "会議室 NORTH": [
-      [null, "busy", "available", "busy", null, "available", "busy"],
-      ["busy", "busy", "available", null, "available", "busy", null],
-      ["available", null, "busy", "available", "busy", null, "available"],
-      [null, "available", "busy", "busy", "available", null, "busy"],
-      ["busy", "available", null, "available", "busy", "available", null],
+      ["available", "busy", "available", "busy", "available", "available", "busy"],
+      ["busy", "busy", "available", "available", "available", "busy", "available"],
+      ["available", "available", "busy", "available", "busy", "available", "available"],
+      ["available", "available", "busy", "busy", "available", "busy", "busy"],
+      ["busy", "available", "available", "available", "busy", "available", "busy"],
     ],
     "多目的ホール": [
-      ["busy", "available", null, "busy", "available", null, "busy"],
-      [null, "busy", "available", "available", "busy", "available", "busy"],
-      ["available", "busy", "busy", null, "available", "busy", null],
-      ["busy", null, "available", "busy", null, "available", "available"],
-      [null, "available", "busy", "available", "busy", null, "available"],
+      ["busy", "available", "busy", "busy", "available", "available", "busy"],
+      ["available", "busy", "available", "available", "busy", "available", "busy"],
+      ["available", "busy", "busy", "available", "available", "busy", "busy"],
+      ["busy", "available", "available", "busy", "busy", "available", "available"],
+      ["busy", "available", "busy", "available", "busy", "available", "available"],
     ],
     "実験室 A": [
-      ["available", "busy", null, "available", "busy", "available", null],
-      ["busy", "available", "busy", null, "available", "busy", "available"],
-      [null, "busy", "available", "busy", null, "available", "busy"],
-      ["available", null, "busy", "available", "busy", null, "available"],
-      ["busy", "available", null, "busy", "available", "busy", null],
+      ["available", "busy", "available", "available", "busy", "available", "busy"],
+      ["busy", "available", "busy", "available", "available", "busy", "available"],
+      ["available", "busy", "available", "busy", "busy", "available", "busy"],
+      ["available", "available", "busy", "available", "busy", "busy", "available"],
+      ["busy", "available", "busy", "busy", "available", "busy", "available"],
     ],
     "実験室 B": [
-      [null, null, "available", "busy", "available", null, "busy"],
-      ["available", "busy", null, "available", "busy", "available", null],
-      ["busy", "available", "busy", null, "available", "busy", "available"],
-      [null, "busy", "available", "busy", null, "available", null],
-      ["available", null, "busy", "available", "busy", null, "available"],
+      ["busy", "available", "available", "busy", "available", "busy", "busy"],
+      ["available", "busy", "available", "available", "busy", "available", "busy"],
+      ["busy", "available", "busy", "busy", "available", "busy", "available"],
+      ["available", "busy", "available", "busy", "available", "available", "busy"],
+      ["available", "busy", "busy", "available", "busy", "available", "available"],
     ],
     "交流ラボ": [
-      ["busy", "available", "busy", null, "available", "busy", null],
-      [null, "busy", "available", "busy", null, "available", "busy"],
-      ["available", null, "busy", "available", "busy", null, "available"],
-      ["busy", "available", null, "busy", "available", "busy", null],
-      [null, "busy", "available", null, "busy", "available", "busy"],
+      ["busy", "available", "busy", "available", "available", "busy", "busy"],
+      ["available", "busy", "available", "busy", "busy", "available", "busy"],
+      ["available", "available", "busy", "available", "busy", "available", "available"],
+      ["busy", "available", "busy", "busy", "available", "busy", "available"],
+      ["available", "busy", "available", "busy", "busy", "available", "busy"],
     ],
     "創造スタジオ": [
-      ["available", "busy", null, "available", "busy", "available", "busy"],
-      ["busy", null, "available", "busy", "available", null, "available"],
-      [null, "available", "busy", null, "busy", "available", null],
-      ["available", "busy", "available", "busy", null, "busy", "available"],
-      ["busy", "available", null, "available", "busy", null, "busy"],
+      ["available", "busy", "available", "available", "busy", "available", "busy"],
+      ["busy", "busy", "available", "busy", "available", "available", "available"],
+      ["available", "available", "busy", "busy", "busy", "available", "available"],
+      ["available", "busy", "available", "busy", "busy", "busy", "available"],
+      ["busy", "available", "available", "available", "busy", "available", "busy"],
     ],
   };
 
@@ -98,15 +98,21 @@ export function initManager(showToast) {
   const managerReject = document.getElementById("manager-reject");
   const weeklyCalendar = document.getElementById("weekly-calendar");
   const facilitySelect = document.getElementById("facility-select");
+  const managerWeekStart = document.getElementById("manager-week-start");
 
   let currentNotification = null;
+  let weekStartDate = new Date();
+
+  // 今日の日付をデフォルトに設定
+  if (managerWeekStart) {
+    managerWeekStart.value = weekStartDate.toISOString().slice(0, 10);
+  }
 
   // 週間カレンダーの描画
-  const renderWeeklyCalendar = (facility) => {
+  const renderWeeklyCalendar = (facility, startDate) => {
     if (!weeklyCalendar) return; // 要素がない場合は終了
     
-    const today = new Date();
-    const days = ["月", "火", "水", "木", "金", "土", "日"];
+    const days = ["日", "月", "火", "水", "木", "金", "土"];
     const times = ["09:00", "11:00", "13:00", "15:00", "17:00"];
     
     weeklyCalendar.innerHTML = "";
@@ -114,9 +120,10 @@ export function initManager(showToast) {
     // ヘッダー（空セル + 曜日）
     weeklyCalendar.innerHTML += '<div class="weekly-calendar-header"></div>';
     for (let i = 0; i < 7; i++) {
-      const date = new Date(today);
-      date.setDate(today.getDate() + i);
-      const dayStr = `${date.getMonth() + 1}/${date.getDate()} (${days[i % 7]})`;
+      const date = new Date(startDate);
+      date.setDate(startDate.getDate() + i);
+      const dayOfWeek = days[date.getDay()];
+      const dayStr = `${date.getMonth() + 1}/${date.getDate()} (${dayOfWeek})`;
       weeklyCalendar.innerHTML += `<div class="weekly-calendar-header">${dayStr}</div>`;
     }
     
@@ -135,7 +142,14 @@ export function initManager(showToast) {
 
   if (facilitySelect) {
     facilitySelect.addEventListener("change", (e) => {
-      renderWeeklyCalendar(e.target.value);
+      renderWeeklyCalendar(e.target.value, weekStartDate);
+    });
+  }
+
+  if (managerWeekStart) {
+    managerWeekStart.addEventListener("change", (e) => {
+      weekStartDate = new Date(e.target.value + "T00:00:00");
+      renderWeeklyCalendar(facilitySelect.value, weekStartDate);
     });
   }
 
@@ -188,6 +202,6 @@ export function initManager(showToast) {
   renderNotifications();
   selectNotification("n-1");
   if (weeklyCalendar && facilitySelect) {
-    renderWeeklyCalendar(facilitySelect.value);
+    renderWeeklyCalendar(facilitySelect.value, weekStartDate);
   }
 }

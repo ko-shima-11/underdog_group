@@ -1,4 +1,57 @@
 export function initApplicant(showToast) {
+  // サンプル予約データ
+  const reservations = [
+    { id: 1, facility: "会議室 NORTH", date: "2026-01-20", time: "10:00-12:00", purpose: "チーム勉強会", status: "approved" },
+    { id: 2, facility: "多目的ホール", date: "2026-01-25", time: "14:00-16:00", purpose: "製品セミナー", status: "pending" },
+    { id: 3, facility: "実験室 A", date: "2026-02-05", time: "09:00-11:00", purpose: "実験レビュー", status: "approved" },
+  ];
+
+  // 週間カレンダー用のダミーデータ
+  const weeklyData = {
+    "会議室 NORTH": [
+      ["available", "busy", "available", "busy", "available", "available", "busy"],
+      ["busy", "busy", "available", "available", "available", "busy", "available"],
+      ["available", "available", "busy", "available", "busy", "available", "available"],
+      ["available", "available", "busy", "busy", "available", "busy", "busy"],
+      ["busy", "available", "available", "available", "busy", "available", "busy"],
+    ],
+    "多目的ホール": [
+      ["busy", "available", "busy", "busy", "available", "available", "busy"],
+      ["available", "busy", "available", "available", "busy", "available", "busy"],
+      ["available", "busy", "busy", "available", "available", "busy", "busy"],
+      ["busy", "available", "available", "busy", "busy", "available", "available"],
+      ["busy", "available", "busy", "available", "busy", "available", "available"],
+    ],
+    "実験室 A": [
+      ["available", "busy", "available", "available", "busy", "available", "busy"],
+      ["busy", "available", "busy", "available", "available", "busy", "available"],
+      ["available", "busy", "available", "busy", "busy", "available", "busy"],
+      ["available", "available", "busy", "available", "busy", "busy", "available"],
+      ["busy", "available", "busy", "busy", "available", "busy", "available"],
+    ],
+    "実験室 B": [
+      ["busy", "available", "available", "busy", "available", "busy", "busy"],
+      ["available", "busy", "available", "available", "busy", "available", "busy"],
+      ["busy", "available", "busy", "busy", "available", "busy", "available"],
+      ["available", "busy", "available", "busy", "available", "available", "busy"],
+      ["available", "busy", "busy", "available", "busy", "available", "available"],
+    ],
+    "交流ラボ": [
+      ["busy", "available", "busy", "available", "available", "busy", "busy"],
+      ["available", "busy", "available", "busy", "busy", "available", "busy"],
+      ["available", "available", "busy", "available", "busy", "available", "available"],
+      ["busy", "available", "busy", "busy", "available", "busy", "available"],
+      ["available", "busy", "available", "busy", "busy", "available", "busy"],
+    ],
+    "創造スタジオ": [
+      ["available", "busy", "available", "available", "busy", "available", "busy"],
+      ["busy", "busy", "available", "busy", "available", "available", "available"],
+      ["available", "available", "busy", "busy", "busy", "available", "available"],
+      ["available", "busy", "available", "busy", "busy", "busy", "available"],
+      ["busy", "available", "available", "available", "busy", "available", "busy"],
+    ],
+  };
+
   const preview = {
     facility: document.getElementById("facility"),
     date: document.getElementById("date"),
@@ -12,6 +65,19 @@ export function initApplicant(showToast) {
   // 今日の日付をデフォルトに設定
   const today = new Date().toISOString().slice(0, 10);
   preview.date.value = today;
+
+  const applicantCalendar = document.getElementById("applicant-calendar");
+  const applicantFacilitySelect = document.getElementById("applicant-facility-select");
+  const applicantWeekStart = document.getElementById("applicant-week-start");
+  const reservationList = document.getElementById("reservation-list");
+  
+  let weekStartDate = new Date();
+
+  // 今日の日付をデフォルトに設定
+  if (applicantWeekStart) {
+    applicantWeekStart.value = weekStartDate.toISOString().slice(0, 10);
+  }
+
   const previewChip = {
     facility: document.querySelector("#preview .chip.accent"),
     date: document.querySelector("#preview .chip.warn"),
@@ -39,6 +105,93 @@ export function initApplicant(showToast) {
     previewChip.purpose.textContent = `用途: ${preview.purpose.value || "-"}`;
     previewChip.memo.textContent = `連絡事項: ${preview.memo.value || "-"}`;
   };
+
+  // 週間カレンダーの描画
+  const renderWeeklyCalendar = (facility, startDate) => {
+    if (!applicantCalendar) return;
+    
+    const days = ["日", "月", "火", "水", "木", "金", "土"];
+    const times = ["09:00", "11:00", "13:00", "15:00", "17:00"];
+    
+    applicantCalendar.innerHTML = "";
+    
+    // ヘッダー（空セル + 曜日）
+    applicantCalendar.innerHTML += '<div class="weekly-calendar-header"></div>';
+    for (let i = 0; i < 7; i++) {
+      const date = new Date(startDate);
+      date.setDate(startDate.getDate() + i);
+      const dayOfWeek = days[date.getDay()];
+      const dayStr = `${date.getMonth() + 1}/${date.getDate()} (${dayOfWeek})`;
+      applicantCalendar.innerHTML += `<div class="weekly-calendar-header">${dayStr}</div>`;
+    }
+    
+    // 時間帯ごとの行
+    const data = weeklyData[facility] || [];
+    times.forEach((time, rowIndex) => {
+      applicantCalendar.innerHTML += `<div class="weekly-calendar-time">${time}</div>`;
+      for (let col = 0; col < 7; col++) {
+        const status = data[rowIndex]?.[col];
+        const className = status ? status : "empty";
+        const text = status === "busy" ? "予約済" : status === "available" ? "空き" : "";
+        applicantCalendar.innerHTML += `<div class="weekly-calendar-cell ${className}">${text}</div>`;
+      }
+    });
+  };
+
+  // 予約リストの描画
+  const renderReservations = () => {
+    reservationList.innerHTML = "";
+    
+    if (reservations.length === 0) {
+      reservationList.innerHTML = '<li style="text-align:center;color:var(--muted);">予約はありません</li>';
+      return;
+    }
+
+    reservations.forEach(reservation => {
+      const li = document.createElement("li");
+      li.innerHTML = `
+        <div class="reservation-info">
+          <strong>${reservation.facility}</strong><br>
+          <small>${formatDateInput(reservation.date)} ${reservation.time}</small><br>
+          <small style="color:var(--muted);">${reservation.purpose}</small>
+        </div>
+        <div class="reservation-actions">
+          <span class="reservation-status ${reservation.status}">${reservation.status === "approved" ? "承認済" : "承認待ち"}</span>
+          <button class="btn-cancel" data-id="${reservation.id}">キャンセル</button>
+        </div>
+      `;
+      reservationList.appendChild(li);
+    });
+
+    // キャンセルボタンのイベント
+    document.querySelectorAll(".btn-cancel").forEach(btn => {
+      btn.addEventListener("click", (e) => {
+        const id = parseInt(e.target.dataset.id);
+        const index = reservations.findIndex(r => r.id === id);
+        if (index !== -1) {
+          if (confirm(`${reservations[index].facility}の予約をキャンセルしますか?`)) {
+            reservations.splice(index, 1);
+            renderReservations();
+            showToast("予約をキャンセルしました", 1800);
+          }
+        }
+      });
+    });
+  };
+
+  // イベントリスナー
+  if (applicantFacilitySelect) {
+    applicantFacilitySelect.addEventListener("change", (e) => {
+      renderWeeklyCalendar(e.target.value, weekStartDate);
+    });
+  }
+
+  if (applicantWeekStart) {
+    applicantWeekStart.addEventListener("change", (e) => {
+      weekStartDate = new Date(e.target.value + "T00:00:00");
+      renderWeeklyCalendar(applicantFacilitySelect.value, weekStartDate);
+    });
+  }
 
   Object.values(preview).forEach((el) => el.addEventListener("input", refreshPreview));
 
@@ -74,5 +227,10 @@ export function initApplicant(showToast) {
     showToast("フォームをクリアしました", 1500);
   });
 
+  // 初期描画
+  if (applicantCalendar && applicantFacilitySelect) {
+    renderWeeklyCalendar(applicantFacilitySelect.value, weekStartDate);
+  }
+  renderReservations();
   refreshPreview();
 }

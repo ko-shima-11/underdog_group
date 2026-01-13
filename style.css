@@ -54,19 +54,25 @@ header {
   padding: 6px;
 }
 .role-toggle button {
-  border: none;
-  background: transparent;
-  color: var(--muted);
-  padding: 10px 14px;
-  border-radius: 10px;
-  cursor: pointer;
-  font-weight: 600;
-  transition: 0.2s ease;
+  border: none !important;
+  background: transparent !important;
+  color: var(--muted) !important;
+  padding: 10px 14px !important;
+  border-radius: 10px !important;
+  cursor: pointer !important;
+  font-weight: 600 !important;
+  transition: 0.2s ease !important;
+  width: auto !important;
+  transform: none !important;
+  box-shadow: none !important;
+}
+.role-toggle button:hover {
+  transform: none !important;
 }
 .role-toggle button.active {
-  background: rgba(79, 209, 197, 0.15);
-  color: #1a202c;
-  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.08);
+  background: rgba(79, 209, 197, 0.15) !important;
+  color: #1a202c !important;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.08) !important;
 }
 main {
   display: grid;
@@ -260,6 +266,53 @@ textarea { resize: vertical; min-height: 96px; }
 }
 .primary:active {
   transform: translateY(0);
+}
+.btn-submit {
+  background: linear-gradient(120deg, #4dc0ea, #4dc0ea);
+  color: #ffffff;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+  font-size: 15px;
+}
+.btn-submit:hover { 
+  transform: translateY(-2px); 
+  box-shadow: 0 12px 35px rgba(79, 209, 197, 0.45);
+}
+.btn-submit:active {
+  transform: translateY(0);
+}
+.btn-secondary {
+  background: rgba(0, 0, 0, 0.05);
+  color: #1a202c;
+  border: 1px solid var(--border);
+  padding: 10px 16px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.2s ease;
+  font-weight: 600;
+}
+.btn-secondary:hover { 
+  background: rgba(79, 209, 197, 0.1);
+  border-color: rgba(79, 209, 197, 0.3);
+}
+.btn-reject-small {
+  background: rgba(255, 107, 107, 0.1);
+  color: #ff6b6b;
+  border: 1px solid rgba(255, 107, 107, 0.3);
+  padding: 8px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.2s ease;
+  font-weight: 600;
+  font-size: 13px;
+}
+.btn-reject-small:hover { 
+  background: rgba(255, 107, 107, 0.2);
+  border-color: rgba(255, 107, 107, 0.5);
 }
 .muted-btn {
   background: rgba(255, 255, 255, 0.06);
@@ -566,6 +619,142 @@ textarea { resize: vertical; min-height: 96px; }
 .weekly-calendar-cell.empty {
   background: #e0e0e0;
   color: #999;
+}
+/* 申請者カレンダー */
+.applicant-calendar {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+  margin-top: 12px;
+}
+.applicant-calendar-day-header {
+  text-align: center;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--muted);
+  padding: 8px 4px;
+}
+.applicant-calendar-day {
+  aspect-ratio: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  font-size: 13px;
+  border: 2px solid transparent;
+  background: #f9f9f9;
+  padding: 4px;
+  position: relative;
+}
+.applicant-calendar-day:hover:not(.empty):not(.other-month) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+.applicant-calendar-day.empty {
+  cursor: default;
+  color: #ccc;
+}
+.applicant-calendar-day.today {
+  border-color: rgba(79, 209, 197, 0.6);
+  font-weight: 700;
+}
+.applicant-calendar-day.selected {
+  background: #ffd166;
+  color: #744210;
+  font-weight: 700;
+  border-color: #ffb730;
+}
+.applicant-calendar-day.busy {
+  background: #ff6b6b;
+  color: #ffffff;
+}
+.applicant-calendar-day.available {
+  background: #4fd1c5;
+  color: #ffffff;
+}
+.applicant-calendar-day.other-month {
+  color: #ccc;
+}
+.applicant-calendar-day .day-number {
+  font-size: 14px;
+  font-weight: 700;
+}
+.applicant-calendar-day .day-status {
+  font-size: 9px;
+  margin-top: 2px;
+}
+/* 予約リスト */
+.reservation-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 10px;
+  margin-top: 12px;
+}
+.reservation-list li {
+  background: rgba(0, 0, 0, 0.02);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  color: #1a202c;
+}
+.reservation-list .reservation-info {
+  flex: 1;
+  min-width: 200px;
+}
+.reservation-list .reservation-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.reservation-list .btn-cancel {
+  background: rgba(255, 107, 107, 0.1);
+  color: #ff6b6b;
+  border: 1px solid rgba(255, 107, 107, 0.3);
+  padding: 6px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.2s ease;
+  font-weight: 600;
+  font-size: 12px;
+}
+.reservation-list .btn-cancel:hover {
+  background: rgba(255, 107, 107, 0.2);
+  border-color: rgba(255, 107, 107, 0.5);
+}
+.reservation-list .reservation-status {
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+}
+.reservation-list .reservation-status.pending {
+  background: rgba(255, 209, 102, 0.3);
+  color: #744210;
+}
+.reservation-list .reservation-status.approved {
+  background: rgba(79, 209, 197, 0.2);
+  color: #0d7377;
+}
+.date-selector {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 12px 0;
+}
+.date-selector label {
+  margin: 0;
+  font-weight: 600;
+  color: var(--ink);
 }
 .toast {
   position: fixed;
